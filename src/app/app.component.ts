@@ -6,4 +6,16 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+
+  isSidebarVisible = false;
+  isLargeSidebarVisible = true;
+
+  handleMenuToggle(isOpen: boolean) {
+    this.isSidebarVisible = isOpen;
+  }
+
+  toggleSidebar() {
+    this.isLargeSidebarVisible = !this.isLargeSidebarVisible;    
+  }
+
 }

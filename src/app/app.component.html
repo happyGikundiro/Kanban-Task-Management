@@ -1,3 +1,16 @@
-<h1 class="text-3xl font-bold underline">
-  Hello world!
-</h1>
+<div class='min-h-screen bg-lightgrey dark:bg-verydarkgrey'>
+  <app-sidebar 
+    [isSidebarVisible]="isSidebarVisible" 
+    [isLargeSidebarVisible]="isLargeSidebarVisible" 
+    (hideSidebar)="toggleSidebar()">
+  </app-sidebar>
+
+  <div>
+    <app-navbar (menuToggle)="handleMenuToggle($event)"></app-navbar>
+
+    <div>
+      <app-home [isLargeSidebarVisible]="isLargeSidebarVisible"></app-home>
+    </div>
+    
+  </div>
+</div>

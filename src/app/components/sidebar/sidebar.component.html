@@ -1,1 +1,106 @@
-<p>sidebar works!</p>
+
+<div *ngIf="isLargeSidebarVisible"
+class='hidden bg-white dark:bg-darkgrey min-h-screen w-[250px] border-r-2 border-r-light dark:border-r-dark z-10 fixed md:flex flex-col justify-between'>
+    <div>
+    <div class='pl-4 py-7'>
+        <img [src]="logoSrc" alt="logo">
+    </div>
+
+    <div class='p-4'>
+        <p class='text-mediumgrey'>ALL BOARDS (3)</p>
+    </div>
+
+    <div>
+        <div class='flex gap-4 items-center text-white  bg-purple hover:text-purple font-bold hover:bg-[#F4F7FD] cursor-pointer p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
+            <div>
+                <img src="/assets/Images/icon-board.svg" alt="icon board">
+            </div>
+            <p>Platform Launch</p>
+        </div>
+
+        <div class='flex gap-4 items-center text-mediumgrey hover:text-purple font-bold hover:bg-[#F4F7FD] cursor-pointer p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
+            <div>
+                <img src="/assets/Images/icon-board.svg" alt="icon board">
+            </div>
+            <p>Marketing Plan</p>
+        </div>
+
+        <div class='flex gap-4 items-center text-mediumgrey hover:text-purple font-bold hover:bg-[#F4F7FD] cursor-pointer p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
+            <div>
+                <img src="/assets/Images/icon-board.svg" alt="icon board">
+            </div>
+            <p>Roadmap</p>
+        </div>
+
+        <button class='flex gap-4 items-center text-purple hover:text-purplehover font-bold hover:bg-[#F4F7FD] cursor-pointer p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
+                <img src="/assets/Images/icon-board.svg" alt="icon board">
+                <span>+ Create New Board</span>
+        </button>
+    </div>
+    </div>
+
+    <div class='py-1'>
+        <div class='bg-lightgrey dark:bg-verydarkgrey m-4 flex justify-center gap-4 items-center p-4 rounded-md'>
+            <div><img src="/assets/Images/icon-light-theme.svg" alt="icon-light-themek"></div>
+            <button (click)="toggleTheme()">
+                <img [src]="modeIconSrc" alt="mode icon">
+            </button>
+            <div><img src="/assets/Images/icon-dark-theme.svg" alt="icon-dark-themek"></div>
+        </div>
+
+        <button (click)="toggleSidebar()" class='flex gap-2 items-center m-4 text-mediumgrey font-bold'>
+            <div><img src="/assets/Images/icon-hide-sidebar.svg" alt="icon-light-themek"></div>
+            <p>Hide Sidebar</p>
+        </button>
+
+    </div>
+</div>
+
+<div *ngIf="isSidebarVisible" class="fixed inset-0 bg-[#000000] bg-opacity-50 md:hidden z-10"></div>
+<div *ngIf="isSidebarVisible" class='bg-white dark:bg-darkgrey absolute rounded-lg md:hidden w-[300px] z-20 top-[20%] left-1/2 transform -translate-x-1/2'>
+    <div>
+        <p class='text-mediumgrey p-4'>ALL BOARDS (3)</p>
+
+        <div class='flex gap-4 items-center text-white bg-purple hover:text-purple font-bold hover:bg-[#F4F7FD] cursor-pointer p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
+            <div>
+                <img src="/assets/Images/icon-board.svg" alt="icon board">
+            </div>
+            <p>Platform Launch</p>
+        </div>
+
+        <div class='flex gap-4 items-center text-mediumgrey hover:text-purple font-bold hover:bg-[#F4F7FD] cursor-pointer p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
+            <div>
+                <img src="/assets/Images/icon-board.svg" alt="icon board">
+            </div>
+            <p>Marketing Plan</p>
+        </div>
+
+        <div class='flex gap-4 items-center text-mediumgrey hover:text-purple font-bold hover:bg-[#F4F7FD] cursor-pointer p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
+            <div>
+                <img src="/assets/Images/icon-board.svg" alt="icon board">
+            </div>
+            <p>Roadmap</p>
+        </div>
+
+        <button class='flex gap-4 items-center text-purple hover:text-purplehover font-bold hover:bg-[#F4F7FD] cursor-pointer p-4  w-[90%] mr-20 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
+            <img src="/assets/Images/icon-board.svg" alt="icon board">
+            <span>+ Create New Board</span>
+        </button>
+    </div>
+
+    <div class='py-4'>
+        <div class='bg-lightgrey dark:bg-verydarkgrey m-4 flex justify-center gap-4 items-center p-4 rounded-md'>
+            <div><img src="/assets/Images/icon-light-theme.svg" alt="icon-light-theme"></div>
+            <button (click)="toggleTheme()">
+                <img [src]="modeIconSrc" alt="mode icon">
+            </button>
+            <div><img src="/assets/Images/icon-dark-theme.svg" alt="icon-dark-theme"></div>
+        </div>
+    </div>
+</div>
+
+
+  <button *ngIf="!isLargeSidebarVisible" (click)="toggleSidebar()"
+      class='flex justify-center items-center bg-purple rounded-tr-full rounded-br-full p-6 absolute bottom-10'>
+        <img src="/assets/Images/icon-show-sidebar.svg" alt="icon-show-sidebar">
+  </button>
