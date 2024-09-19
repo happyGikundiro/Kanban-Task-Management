@@ -12,13 +12,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { boardReducer } from './store/Tasks/board.reducer';
 import { BoardEffects } from './store/Tasks/board.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
     NavbarComponent,
-    HomeComponent
+    HomeComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,

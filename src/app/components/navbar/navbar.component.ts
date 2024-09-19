@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { ThemeService } from '../../services/theme/theme.service';
 import { Subscription } from 'rxjs';
+import { ModalService } from '../../services/modal/modal.service';
 
 @Component({
   selector: 'app-navbar',
@@ -13,7 +14,7 @@ export class NavbarComponent implements OnInit, OnDestroy{
   @Output() menuToggle = new EventEmitter<boolean>();
   themeSubscription!: Subscription;
 
-  constructor(private themeService: ThemeService) {}
+  constructor(private themeService: ThemeService, private modalService: ModalService) {}
 
   ngOnInit(): void {
     this.themeSubscription = this.themeService.getDarkModeStatus().subscribe(() => {
@@ -35,5 +36,13 @@ export class NavbarComponent implements OnInit, OnDestroy{
     if (this.themeSubscription) {
       this.themeSubscription.unsubscribe();
     }
+  }
+
+  openAddTaskModal(): void {
+    const taskData = {
+      type: 'addTask',
+      // boardId: 1,
+    };
+    this.modalService.openModal(taskData);
   }
 }

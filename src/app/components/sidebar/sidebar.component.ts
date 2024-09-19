@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ThemeService } from '../../services/theme/theme.service';
 import { Subscription } from 'rxjs';
+import { ModalService } from '../../services/modal/modal.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -17,7 +18,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   @Input() isLargeSidebarVisible = true;
   @Output() hideSidebar = new EventEmitter<void>();
 
-  constructor(private themeService: ThemeService) {}
+  constructor(private themeService: ThemeService, private modalService: ModalService) {}
 
   ngOnInit(): void {
     this.updateLogoAndIcon();
@@ -43,6 +44,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (this.themeSubscription) {
       this.themeSubscription.unsubscribe();
     }
+  }
+
+  openAddBoardModal(): void {
+    console.log("clicked")
+    const taskData = {
+      type: 'addBoard',
+      boardId: 1, // or pass the current board ID
+    };
+    this.modalService.openModal(taskData);
   }
 }
 
