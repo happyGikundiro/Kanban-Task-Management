@@ -25,7 +25,7 @@ import { ModalComponent } from './components/modal/modal.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot({ boards: boardReducer}),
+    StoreModule.forRoot({ board: boardReducer}),
     EffectsModule.forRoot([BoardEffects]),
     HttpClientModule,
     StoreDevtoolsModule.instrument({

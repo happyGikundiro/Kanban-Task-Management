@@ -1,54 +1,33 @@
-// import { createReducer, on } from '@ngrx/store';
-// import * as BoardActions from './board.actions';
-// import { Board } from '../../model/model';
-
-// export interface BoardState {
-//     boards: Board[];
-//     loading: boolean;
-//     error: string;
-// }
-
-// export const initialBoardState: BoardState = {
-//     boards: [],
-//     loading: false,
-//     error: '',
-// };
-
-// export const boardReducer = createReducer(
-//     initialBoardState,
-
-//     on(BoardActions.loadBoard, state => ({ ...state, loading: true })),
-//     on(BoardActions.loadBoardSuccess, (state, { boards }) =>  ({ ...state, boards, loading: false })),
-//     on(BoardActions.loadBoardFailure, (state, { error }) => ({ ...state, error, loading: false })),
-// )
-
-import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
 import * as BoardActions from './board.actions';
 import { Board } from '../../model/model';
 
-export interface BoardState extends EntityState<Board> {
+export interface BoardState {
+  boards: Board[];
   loading: boolean;
-  error: string;
+  error: string | null;
+  activeBoardName: string | null;
 }
 
-export const boardAdapter: EntityAdapter<Board> = createEntityAdapter<Board>();
-
-export const initialBoardState: BoardState = boardAdapter.getInitialState({
+export const initialState: BoardState = {
+  boards: [],
   loading: false,
-  error: '',
-});
+  error: null,
+  activeBoardName: null,
+};
 
 export const boardReducer = createReducer(
-  initialBoardState,
+  initialState,
+  on(BoardActions.loadBoards, (state) => ({ ...state, loading: true, error: null, })),
 
-  on(BoardActions.loadBoard, state => ({ ...state, loading: true })),
-  
-  on(BoardActions.loadBoardSuccess, (state, { boards }) => 
-    boardAdapter.setAll(boards, { ...state, loading: false })
-  ),
-  
-  on(BoardActions.loadBoardFailure, (state, { error }) => 
-    ({ ...state, error, loading: false })
-  ),
+  on(BoardActions.loadBoardsSuccess, (state, { boards }) => ({...state, boards: boards, loading: false, error: null, })),
+
+  on(BoardActions.loadBoardsFailure, (state, { error }) => ({...state, loading: false,error, })),
+
+  on(BoardActions.selectBoard, (state, { boardName }) => ({...state, activeBoardName: boardName}))
+
 );
+
+
+
+

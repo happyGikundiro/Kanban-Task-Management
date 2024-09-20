@@ -12,7 +12,9 @@
     <div class='flex items-center gap-2 md:gap-6'>
         <div class='h-20 w-[1px] bg-light dark:bg-dark hidden md:block'></div>
 
-        <p class='text-black dark:text-white font-bold'>Platform Launch</p>
+        <div *ngIf="activeBoard$ | async as activeBoard">
+            <p class='text-black dark:text-white font-bold'>{{ activeBoard.name }}</p>
+        </div>
         <button class="md:hidden mt-1" (click)="toggleMenu()">
             <img [src]="isMenuOpen ? '/assets/Images/icon-chevron-up.svg' : '/assets/Images/icon-chevron-down.svg'" alt="menu-toggle-icon">
         </button>

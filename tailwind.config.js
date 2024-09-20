@@ -18,6 +18,8 @@ module.exports = {
         red: "#EA5555",
         redhover: "#FF9898",
         grey: "#E0E3E8",
+        lightblue: "#49C4E5",
+        lightgreen: "#67E2AE",
       },
     },
   },

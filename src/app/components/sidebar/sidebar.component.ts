@@ -1,7 +1,11 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ThemeService } from '../../services/theme/theme.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ModalService } from '../../services/modal/modal.service';
+import { Store } from '@ngrx/store';
+import { Board } from '../../model/model';
+import { selectActiveBoardName, selectAllBoards } from '../../store/Tasks/board.selectors';
+import { selectBoard } from '../../store/Tasks/board.actions';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,13 +22,22 @@ export class SidebarComponent implements OnInit, OnDestroy {
   @Input() isLargeSidebarVisible = true;
   @Output() hideSidebar = new EventEmitter<void>();
 
-  constructor(private themeService: ThemeService, private modalService: ModalService) {}
+  boards$: Observable<Board[]> = this.store.select(selectAllBoards);
+  activeBoardName$: Observable<string | null> = this.store.select(selectActiveBoardName);
+
+  onSelectBoard(boardName: string): void {
+    this.store.dispatch(selectBoard({ boardName }));
+  }
+
+  constructor(private themeService: ThemeService, private modalService: ModalService, private store: Store) {}
 
   ngOnInit(): void {
     this.updateLogoAndIcon();
     this.themeSubscription = this.themeService.getDarkModeStatus().subscribe((isDarkMode) => {
       this.updateLogoAndIcon(isDarkMode);
     });
+
+    this.store.dispatch(selectBoard({ boardName: 'Platform Launch' }));
   }
 
   updateLogoAndIcon(isDarkMode: boolean = this.themeService.isDarkMode()): void {

@@ -1,4 +1,3 @@
-// modal.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ModalService } from '../../services/modal/modal.service';

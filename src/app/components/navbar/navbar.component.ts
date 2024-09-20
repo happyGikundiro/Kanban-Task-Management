@@ -1,7 +1,10 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { ThemeService } from '../../services/theme/theme.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ModalService } from '../../services/modal/modal.service';
+import { Store } from '@ngrx/store';
+import { selectActiveBoard } from '../../store/Tasks/board.selectors';
+import { Board } from '../../model/model';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +17,10 @@ export class NavbarComponent implements OnInit, OnDestroy{
   @Output() menuToggle = new EventEmitter<boolean>();
   themeSubscription!: Subscription;
 
-  constructor(private themeService: ThemeService, private modalService: ModalService) {}
+  activeBoard$: Observable<Board| undefined> = this.store.select(selectActiveBoard);
+
+
+  constructor(private themeService: ThemeService, private modalService: ModalService, private store: Store) {}
 
   ngOnInit(): void {
     this.themeSubscription = this.themeService.getDarkModeStatus().subscribe(() => {

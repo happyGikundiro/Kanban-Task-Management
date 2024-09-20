@@ -7,36 +7,28 @@ class='hidden bg-white dark:bg-darkgrey min-h-screen w-[250px] border-r-2 border
     </div>
 
     <div class='p-4'>
-        <p class='text-mediumgrey'>ALL BOARDS (3)</p>
+        <p class='text-mediumgrey'>ALL BOARDS ({{ (boards$ | async)?.length || 0 }})</p>
     </div>
 
-    <div>
-        <div class='flex gap-4 items-center text-white  bg-purple hover:text-purple font-bold hover:bg-[#F4F7FD] cursor-pointer p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
-            <div>
-                <img src="/assets/Images/icon-board.svg" alt="icon board">
-            </div>
-            <p>Platform Launch</p>
+    <div *ngFor="let board of boards$ | async">
+        <div
+          (click)="onSelectBoard(board.name)"   
+          class="flex gap-4 items-center cursor-pointer font-bold  p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out"
+          [ngClass]="{
+            'bg-purple text-white hover:text-purple hover:bg-purplehover ': (activeBoardName$ | async) === board.name,
+            'text-mediumgrey hover:text-purple hover:bg-[#F4F7FD]': (activeBoardName$ | async) !== board.name
+          }"
+        >
+          <img src="/assets/Images/icon-board.svg" alt="icon board" />
+          <p>{{ board.name }}</p>
         </div>
+      </div>
 
-        <div class='flex gap-4 items-center text-mediumgrey hover:text-purple font-bold hover:bg-[#F4F7FD] cursor-pointer p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
-            <div>
-                <img src="/assets/Images/icon-board.svg" alt="icon board">
-            </div>
-            <p>Marketing Plan</p>
-        </div>
+      <button (click)="openAddBoardModal()" class='flex gap-4 items-center text-purple hover:text-purplehover font-bold hover:bg-[#F4F7FD] cursor-pointer p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
+        <img src="/assets/Images/icon-board.svg" alt="icon board">
+        <span>+ Create New Board</span>
+      </button>
 
-        <div class='flex gap-4 items-center text-mediumgrey hover:text-purple font-bold hover:bg-[#F4F7FD] cursor-pointer p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
-            <div>
-                <img src="/assets/Images/icon-board.svg" alt="icon board">
-            </div>
-            <p>Roadmap</p>
-        </div>
-
-        <button (click)="openAddBoardModal()" class='flex gap-4 items-center text-purple hover:text-purplehover font-bold hover:bg-[#F4F7FD] cursor-pointer p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
-                <img src="/assets/Images/icon-board.svg" alt="icon board">
-                <span>+ Create New Board</span>
-        </button>
-    </div>
     </div>
 
     <div class='py-1'>
@@ -59,33 +51,28 @@ class='hidden bg-white dark:bg-darkgrey min-h-screen w-[250px] border-r-2 border
 <div *ngIf="isSidebarVisible" class="fixed inset-0 bg-[#000000] bg-opacity-50 md:hidden z-10"></div>
 <div *ngIf="isSidebarVisible" class='bg-white dark:bg-darkgrey absolute rounded-lg md:hidden w-[300px] z-20 top-[20%] left-1/2 transform -translate-x-1/2'>
     <div>
-        <p class='text-mediumgrey p-4'>ALL BOARDS (3)</p>
-
-        <div class='flex gap-4 items-center text-white bg-purple hover:text-purple font-bold hover:bg-[#F4F7FD] cursor-pointer p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
-            <div>
-                <img src="/assets/Images/icon-board.svg" alt="icon board">
-            </div>
-            <p>Platform Launch</p>
+        <div class='p-4'>
+            <p class='text-mediumgrey'>ALL BOARDS ({{ (boards$ | async)?.length || 0 }})</p>
         </div>
-
-        <div class='flex gap-4 items-center text-mediumgrey hover:text-purple font-bold hover:bg-[#F4F7FD] cursor-pointer p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
-            <div>
-                <img src="/assets/Images/icon-board.svg" alt="icon board">
+    
+        <div *ngFor="let board of boards$ | async">
+            <div
+              (click)="onSelectBoard(board.name)"   
+              class="flex gap-4 items-center cursor-pointer font-bold  p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out"
+              [ngClass]="{
+                'bg-purple text-white hover:text-purple hover:bg-purplehover ': (activeBoardName$ | async) === board.name,
+                'text-mediumgrey hover:text-purple hover:bg-[#F4F7FD]': (activeBoardName$ | async) !== board.name
+              }"
+            >
+              <img src="/assets/Images/icon-board.svg" alt="icon board" />
+              <p>{{ board.name }}</p>
             </div>
-            <p>Marketing Plan</p>
-        </div>
-
-        <div class='flex gap-4 items-center text-mediumgrey hover:text-purple font-bold hover:bg-[#F4F7FD] cursor-pointer p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
-            <div>
-                <img src="/assets/Images/icon-board.svg" alt="icon board">
-            </div>
-            <p>Roadmap</p>
-        </div>
-
-        <button (click)="openAddBoardModal()" class='flex gap-4 items-center text-purple hover:text-purplehover font-bold hover:bg-[#F4F7FD] cursor-pointer p-4  w-[90%] mr-20 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
+          </div>
+    
+          <button (click)="openAddBoardModal()" class='flex gap-4 items-center text-purple hover:text-purplehover font-bold hover:bg-[#F4F7FD] cursor-pointer p-4 mr-6 rounded-tr-full rounded-br-full transition-colors duration-300 ease-in-out'>
             <img src="/assets/Images/icon-board.svg" alt="icon board">
             <span>+ Create New Board</span>
-        </button>
+          </button>
     </div>
 
     <div class='py-4'>
@@ -101,6 +88,6 @@ class='hidden bg-white dark:bg-darkgrey min-h-screen w-[250px] border-r-2 border
 
 
   <button *ngIf="!isLargeSidebarVisible" (click)="toggleSidebar()"
-      class='flex justify-center items-center bg-purple rounded-tr-full rounded-br-full p-6 absolute bottom-10'>
+      class=' justify-center items-center bg-purple rounded-tr-full rounded-br-full p-6 fixed bottom-10'>
         <img src="/assets/Images/icon-show-sidebar.svg" alt="icon-show-sidebar">
   </button>
