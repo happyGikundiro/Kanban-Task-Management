@@ -14,8 +14,8 @@
     <h3 class='text-mediumgrey font-semibold'>{{ column.name }}({{column.tasks.length}})</h3>
     </div>
       <ul>
-          <li *ngFor="let task of column.tasks" class='bg-white shadow-lg rounded-md p-4 mb-4'>
-              <p class='text-black font-bold text-sm mb-2'>{{ task.title }}</p>
+          <li *ngFor="let task of column.tasks" class='bg-white dark:bg-darkgrey shadow-lg rounded-md p-4 mb-4'>
+              <p class='text-black dark:text-white font-bold text-sm mb-2'>{{ task.title }}</p>
               <p class='text-mediumgrey font-bold text-sm'>
                   {{ getCompletedSubtasksCount(task.subtasks) }} of {{ task.subtasks.length }} Subtasks
               </p>
@@ -23,7 +23,7 @@
       </ul>
   </div>
 </div>
-<div class='flex justify-center items-center bg-light h-screen rounded-md mt-10 mb-6'>
+<div class='flex justify-center items-center bg-light dark:bg-darkgrey h-screen rounded-md mt-10 mb-6'>
   <button class='text-mediumgrey font-bold w-[250px]'>
     + New Column
   </button>
