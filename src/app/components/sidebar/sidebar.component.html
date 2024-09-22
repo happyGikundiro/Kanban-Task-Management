@@ -88,6 +88,77 @@ class='hidden bg-white dark:bg-darkgrey min-h-screen w-[250px] border-r-2 border
 
 
   <button *ngIf="!isLargeSidebarVisible" (click)="toggleSidebar()"
-      class=' justify-center items-center bg-purple rounded-tr-full rounded-br-full p-6 fixed bottom-10'>
+      class=' justify-center items-center bg-purple hover:bg-purplehover rounded-tr-full rounded-br-full p-6 fixed bottom-10'>
         <img src="/assets/Images/icon-show-sidebar.svg" alt="icon-show-sidebar">
   </button>
+
+
+  <app-modal *ngIf="(modalService.modalType$ | async) === 'addBoard'" [isModalOpen]="modalService.isModalOpen$">
+    
+    <div class='p-6 max-h-[90vh] overflow-y-auto scrollbar-hidden '>
+      <h2 class="text-xl dark:text-white text-black font-bold mb-4">Add New Board</h2>
+
+      <form [formGroup]="boardForm" (ngSubmit)="onSubmit()" class='space-y-4'>
+        <div class='space-y-2'>
+          <label for="boardname" class="text-mediumgrey dark:text-white font-semibold">Board Name</label>
+          <div class="relative">
+            <input
+              type="text"
+              id="boardname"
+              formControlName="boardName"
+              class="w-full dark:bg-darkgrey outline-none text-black focus:border-purple px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white"
+              placeholder="e.g. Web Design"
+            />
+            <p *ngIf="boardForm.controls['boardName'].invalid && boardForm.controls['boardName'].touched" class="absolute right-4 top-3 text-red text-xs">
+              Can't be empty
+            </p>
+          </div>
+        </div>
+      
+        <div class='space-y-3'>
+          <p class="text-mediumgrey dark:text-white font-semibold">Board Columns</p>
+      
+          <div formArrayName="columns" class='space-y-3'>
+            <div *ngFor="let column of columns.controls; let i = index" class="flex items-center gap-4 w-full">
+              <div class="relative w-[96%]">
+                <input
+                  type="text"
+                  [formControlName]="i"
+                  class="w-full dark:bg-darkgrey text-black outline-none focus:border-purple px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white"
+                  placeholder="Column Name"
+                />
+                <p *ngIf="column.invalid && column.touched" class="absolute right-4 top-3 text-red text-xs">
+                  Can't be empty
+                </p>
+              </div>
+              <div class='w-[4%] flex justify-end'>
+                <img
+                  src="/assets/Images/icon-cross.svg"
+                  alt="icon cross"
+                  (click)="removeColumn(i)"
+                  class="cursor-pointer"
+                />
+              </div>
+            </div>
+          </div>
+      
+          <button
+            type="button"
+            (click)="addColumn()"
+            class="w-full bg-[#F4F7FD] hover:bg-[#f5f2f7] rounded-[30px] flex justify-center items-center text-purple py-3 px-6 font-bold text-[12px]"
+          >
+            <span class="lg:text-md">+ Add New Column</span>
+          </button>
+        </div>
+      
+        <button
+          type="submit"
+          class="w-full bg-purple hover:bg-purplehover rounded-[30px] flex justify-center items-center text-white py-3 px-6 font-bold text-[12px]"
+        >
+          <span class="lg:text-md">Create New Board</span>
+        </button>
+      </form>
+      
+    </div>
+
+  </app-modal>

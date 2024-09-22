@@ -24,7 +24,15 @@ export const boardReducer = createReducer(
 
   on(BoardActions.loadBoardsFailure, (state, { error }) => ({...state, loading: false,error, })),
 
-  on(BoardActions.selectBoard, (state, { boardName }) => ({...state, activeBoardName: boardName}))
+  on(BoardActions.selectBoard, (state, { boardName }) => ({...state, activeBoardName: boardName})),
+
+  on(BoardActions.addBoard, (state) => ({ ...state, loading: true })),
+
+  on(BoardActions.addBoardSuccess, (state, { board }) => {
+    return { ...state, boards: [...state.boards, board], loading: false, error: null, };
+  }),
+  
+  on(BoardActions.addBoardFailure, (state, { error }) => ({ ...state, loading: false, error, }))
 
 );
 

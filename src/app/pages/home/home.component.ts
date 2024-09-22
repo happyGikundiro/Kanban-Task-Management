@@ -1,4 +1,4 @@
-import { Board, Subtask } from './../../model/model';
+import { Board,  Subtask, Task } from './../../model/model';
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalService } from '../../services/modal/modal.service';
 import { Store } from '@ngrx/store';
@@ -21,26 +21,23 @@ export class HomeComponent implements OnInit{
   error$!: Observable<string | null>;
   activeBoard$: Observable<Board | undefined> = this.store.select(selectActiveBoard);
 
+  selectedTask: Task | null = {
+    title: '',
+    description: '',
+    status: '',
+    subtasks: [] 
+};;
 
-  constructor(private modalService: ModalService, private store: Store) {}
+  constructor(public modalService: ModalService, private store: Store) {}
 
-  openAddColumnModal(){
-    console.log("clicked")
-    const taskData = {
-      type: 'addColumn',
-      boardId: 1,
-    };
-    this.modalService.openModal(taskData);
+  openTaskDetails(task: Task): void {
+    this.selectedTask = {
+      ...task,
+      subtasks: task.subtasks || []
+    };  
+    this.modalService.openModal('taskDetails');
   }
-
-  openTaskDetails(task: Board): void {
-    const taskData = {
-      type: 'taskDetails',
-      task: task,
-    };
-    this.modalService.openModal(taskData);
-  }
-  
+   
   ngOnInit(): void {
 
     this.boards$ = this.store.select(selectAllBoards);
@@ -52,6 +49,10 @@ export class HomeComponent implements OnInit{
 
   getCompletedSubtasksCount(subtasks: Subtask[]): number {
     return subtasks.filter(subtask => subtask.isCompleted).length;
+  }
+
+  toggleSubtaskCompletion(subtask: Subtask): void {
+    subtask.isCompleted = !subtask.isCompleted;
   }
 
 }

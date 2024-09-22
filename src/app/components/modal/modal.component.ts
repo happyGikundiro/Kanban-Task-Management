@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ModalService } from '../../services/modal/modal.service';
 
@@ -8,17 +8,14 @@ import { ModalService } from '../../services/modal/modal.service';
   styleUrls: ['./modal.component.css']
 })
 export class ModalComponent implements OnInit {
-  isModalOpen!: Observable<boolean>;
-  modalData$!: Observable<any>;
 
-  constructor(private modalService: ModalService) { }
+  @Input() isModalOpen!: Observable<boolean>;
 
-  ngOnInit(): void {
-    this.isModalOpen = this.modalService.getModalState();
-    this.modalData$ = this.modalService.getModalData();
-  }
+  constructor(private modalService: ModalService) {}
 
-  closeModal(): void {
+  ngOnInit(): void {}
+
+   closeModal(): void {
     this.modalService.closeModal();
   }
 
@@ -27,5 +24,4 @@ export class ModalComponent implements OnInit {
       this.closeModal();
     }
   }
-
 }

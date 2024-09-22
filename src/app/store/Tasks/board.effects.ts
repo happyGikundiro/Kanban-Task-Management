@@ -23,6 +23,16 @@ export class BoardEffects {
       )
     )
   );
-  
-}
 
+  addBoard$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(BoardActions.addBoard),
+      map(({ board }) => {
+        return BoardActions.addBoardSuccess({ board });
+      }),
+      catchError((error) =>
+        of(BoardActions.addBoardFailure({ error: error.message }))
+      )
+    )
+  );
+}

@@ -3,16 +3,16 @@ export interface Subtask {
     isCompleted: boolean;
   }
 
-  interface Task {
+ export interface Task {
     title: string;
     description: string;
     status: string;
     subtasks: Subtask[];
   }
   
-  interface Column {
+ export  interface Column {
     name: string;
-    tasks: Task[];
+    tasks?: Task[];
   }
   
  export interface Board {

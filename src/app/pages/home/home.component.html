@@ -1,41 +1,88 @@
-<div [class.md:ml-[250px]]="isLargeSidebarVisible" class="pt-[100px] px-6 flex gap-6 overflow-x-auto w-full bg-lightgrey dark:bg-verydarkgrey no-scrollbar">
-<div *ngIf="activeBoard$ | async as activeBoard; else noBoards"  class="flex gap-6">
-  <div *ngFor="let column of activeBoard.columns" class='w-[320px]'>
+ 
+  <div [class.md:ml-[250px]]="isLargeSidebarVisible" class="pt-[100px] px-6 flex gap-6 overflow-x-auto w-full bg-lightgrey dark:bg-verydarkgrey no-scrollbar">
+    <div *ngIf="activeBoard$ | async as activeBoard; else noBoards" class="flex gap-6">
+      <div *ngFor="let column of activeBoard.columns || []" class='w-[320px]'>
+    
+        <div class='flex items-center bg-slate- mb-4 gap-3'>
+          <div class='h-4 w-4 rounded-full'
+            [ngClass]="{
+              'bg-lightblue': column.name === 'Todo' || column.name === 'Now',
+              'bg-purple': column.name === 'Doing' || column.name === 'Next',
+              'bg-lightgreen': column.name === 'Done' || column.name === 'Later',
+              'bg-purplehover': !['Todo', 'Now', 'Doing', 'Next', 'Done', 'Later'].includes(column.name)
+            }">
+          </div>
+          <h3 class='text-mediumgrey font-semibold'>{{ column.name }} ({{ column.tasks?.length || 0 }})</h3>
 
-    <div class='flex items-center bg-slate- mb-4 gap-3'>
-      <div class='h-4 w-4 rounded-full'
-     [ngClass]="{
-       'bg-lightblue': column.name === 'Todo' || column.name === 'Now',
-       'bg-purple': column.name === 'Doing' || column.name === 'Next',
-       'bg-lightgreen': column.name === 'Done' || column.name === 'Later',
-       'bg-purplehover': column.name !== 'Todo' && column.name !== 'Now' && column.name !== 'Doing' && column.name !== 'Next' && column.name !== 'Done' && column.name !== 'Later'
-     }">
-    </div>
-    <h3 class='text-mediumgrey font-semibold'>{{ column.name }}({{column.tasks.length}})</h3>
-    </div>
-      <ul>
-          <li *ngFor="let task of column.tasks" class='bg-white dark:bg-darkgrey shadow-lg rounded-md p-4 mb-4'>
-              <p class='text-black dark:text-white font-bold text-sm mb-2'>{{ task.title }}</p>
-              <p class='text-mediumgrey font-bold text-sm'>
-                  {{ getCompletedSubtasksCount(task.subtasks) }} of {{ task.subtasks.length }} Subtasks
-              </p>
+        </div>
+        <ul>
+          <li *ngFor="let task of column.tasks || []" (click)='openTaskDetails(task)' class='bg-white dark:bg-darkgrey shadow-lg rounded-md p-4 mb-4 cursor-pointer'>
+            <p class='text-black dark:text-white font-bold text-sm mb-2'>{{ task.title }}</p>
+            <p class='text-mediumgrey font-bold text-sm'>
+              {{ getCompletedSubtasksCount(task.subtasks) }} of {{ task.subtasks.length }} Subtasks
+            </p>
           </li>
-      </ul>
-  </div>
-</div>
-<div class='flex justify-center items-center bg-light dark:bg-darkgrey h-screen rounded-md mt-10 mb-6'>
-  <button class='text-mediumgrey font-bold w-[250px]'>
-    + New Column
-  </button>
-</div>
-</div>
-
-<ng-template #noBoards>
-  <div [class.md:ml-[250px]]="isLargeSidebarVisible" class="pt-[100px] min-h-screen flex flex-col justify-center items-center space-y-4">
-      <p class='text-mediumgrey font-bold text-center px-10'>This board is empty. Create a new column to get started.</p>
-
-      <button (click)="openAddColumnModal()" class="bg-purple hover:bg-purplehover rounded-[30px] flex justify-center items-center gap-2 text-white py-3 px-6 md:px-4 font-bold text-[12px]">
-          <span class="lg:text-md">+ Add new Column</span>
+        </ul>
+      </div>
+    </div>
+    <div class='flex justify-center items-center bg-light dark:bg-darkgrey h-screen rounded-md mt-10 mb-6'>
+      <button class='text-mediumgrey font-bold w-[250px]'>
+        + New Column
       </button>
+    </div>
   </div>
-</ng-template>
+  
+  <ng-template #noBoards>
+    <div [class.md:ml-[250px]]="isLargeSidebarVisible" class="pt-[100px] min-h-screen flex flex-col justify-center items-center space-y-4">
+      <p class='text-mediumgrey font-bold text-center px-10'>This board is empty. Create a new column to get started.</p>
+      <button class="bg-purple hover:bg-purplehover rounded-[30px] flex justify-center items-center gap-2 text-white py-3 px-6 md:px-4 font-bold text-[12px]">
+        <span class="lg:text-md">+ Add new Column</span>
+      </button>
+    </div>
+  </ng-template>
+  
+
+  <app-modal *ngIf="selectedTask && (modalService.modalType$ | async) === 'taskDetails'" [isModalOpen]="modalService.isModalOpen$">
+    <div class='max-h-[90vh] overflow-y-auto scrollbar-hidden p-6 space-y-6'>
+      <div class='flex justify-between items-center gap-6'>
+        <p class='text:black dark:text-white font-bold'>{{ selectedTask.title }}</p>
+        <button>
+          <img src="/assets/Images/icon-vertical-ellipsis.svg" alt="menu" class="flex justify-center items-center">
+        </button>
+      </div>
+  
+      <p class='text-mediumgrey text-sm'>{{ selectedTask.description }}</p>
+  
+      <div class='space-y-3'>
+        <p class='text-mediumgrey dark:text-white font-bold'>
+          Subtasks ({{ getCompletedSubtasksCount(selectedTask.subtasks) }} of {{ selectedTask.subtasks.length }})
+        </p>
+  
+        <div *ngFor="let subtask of selectedTask.subtasks" class="flex items-center gap-4 bg-lightgrey dark:bg-verydarkgrey p-4 rounded">
+          <input
+            type="checkbox"
+            [checked]="subtask.isCompleted"
+            (change)="toggleSubtaskCompletion(subtask)"
+            class="w-6 h-6 border border-grey rounded bg-white dark:bg-darkBlue peer appearance-none checked:bg-purple dark:checked:bg-purple checked:border-transparent checked:after:content-['✓'] checked:after:text-white checked:after:text-sm checked:after:flex checked:after:items-center checked:after:justify-center"
+          />
+  
+          <label [class.line-through]="subtask.isCompleted" class="text-dark font-semibold dark:text-white">
+            {{ subtask.title }}
+          </label>
+        </div>
+      </div>
+  
+      <div *ngIf="activeBoard$ | async as activeBoard">
+        <label for="current-status" class="text-mediumgrey dark:text-white font-semibold">Current Status</label>
+        <select
+          id='current-status'
+          class="w-full dark:bg-darkgrey text-black outline-none px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white focus:border-purple"
+          [(ngModel)]="selectedTask.status">
+          
+          <option *ngFor="let column of activeBoard.columns" [value]="column.name">
+            {{ column.name }}
+          </option>
+        </select>
+      </div> 
+    </div>
+  </app-modal>

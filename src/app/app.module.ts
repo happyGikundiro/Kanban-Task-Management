@@ -13,6 +13,7 @@ import { boardReducer } from './store/Tasks/board.reducer';
 import { BoardEffects } from './store/Tasks/board.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { ModalComponent } from './components/modal/modal.component';
+import {FormsModule, ReactiveFormsModule }from '@angular/forms'
 
 @NgModule({
   declarations: [
@@ -25,6 +26,8 @@ import { ModalComponent } from './components/modal/modal.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
     StoreModule.forRoot({ board: boardReducer}),
     EffectsModule.forRoot([BoardEffects]),
     HttpClientModule,
@@ -35,7 +38,8 @@ import { ModalComponent } from './components/modal/modal.component';
       trace: false,
       traceLimit: 75,
       connectInZone: true,
-    })
+    }),
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

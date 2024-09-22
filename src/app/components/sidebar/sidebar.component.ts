@@ -5,7 +5,8 @@ import { ModalService } from '../../services/modal/modal.service';
 import { Store } from '@ngrx/store';
 import { Board } from '../../model/model';
 import { selectActiveBoardName, selectAllBoards } from '../../store/Tasks/board.selectors';
-import { selectBoard } from '../../store/Tasks/board.actions';
+import { addBoard, loadBoards, selectBoard } from '../../store/Tasks/board.actions';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-sidebar',
@@ -22,6 +23,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   @Input() isLargeSidebarVisible = true;
   @Output() hideSidebar = new EventEmitter<void>();
 
+  boardForm!: FormGroup;
+
   boards$: Observable<Board[]> = this.store.select(selectAllBoards);
   activeBoardName$: Observable<string | null> = this.store.select(selectActiveBoardName);
 
@@ -29,15 +32,24 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.store.dispatch(selectBoard({ boardName }));
   }
 
-  constructor(private themeService: ThemeService, private modalService: ModalService, private store: Store) {}
+  constructor(private themeService: ThemeService, public modalService: ModalService, private store: Store, private fb: FormBuilder) {}
 
   ngOnInit(): void {
+
+    this. initializeForm();
+
     this.updateLogoAndIcon();
     this.themeSubscription = this.themeService.getDarkModeStatus().subscribe((isDarkMode) => {
       this.updateLogoAndIcon(isDarkMode);
     });
 
-    this.store.dispatch(selectBoard({ boardName: 'Platform Launch' }));
+    this.store.dispatch(loadBoards());
+
+    this.boards$.subscribe((boards) => {
+      if (boards.length > 0) {
+        this.store.dispatch(selectBoard({ boardName: 'Platform Launch' }));
+      }
+    });
   }
 
   updateLogoAndIcon(isDarkMode: boolean = this.themeService.isDarkMode()): void {
@@ -60,13 +72,44 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   openAddBoardModal(): void {
-    console.log("clicked")
-    const taskData = {
-      type: 'addBoard',
-      boardId: 1, // or pass the current board ID
-    };
-    this.modalService.openModal(taskData);
+    this.modalService.openModal('addBoard'); 
+  }  
+
+  initializeForm(): void {
+    this.boardForm = this.fb.group({
+      boardName: ['', Validators.required],
+      columns: this.fb.array([this.createColumn()], Validators.required)
+    });
   }
+
+  get columns() {
+    return this.boardForm.get('columns') as FormArray;
+  }
+
+  createColumn(): FormControl {
+    return this.fb.control('', Validators.required);
+  }
+
+  addColumn() {
+    this.columns.push(this.createColumn());
+  }
+
+  removeColumn(index: number) {
+    this.columns.removeAt(index);
+  }
+
+  onSubmit() {
+    if (this.boardForm.valid) {
+      const newBoard: Board = {
+        name: this.boardForm.value.boardName,
+        columns: this.boardForm.value.columns.map((col: string) => ({ name: col }))
+      };
+
+      this.store.dispatch(addBoard({ board: newBoard }));
+      this.boardForm.reset();
+    }
+  }
+
 }
 
 

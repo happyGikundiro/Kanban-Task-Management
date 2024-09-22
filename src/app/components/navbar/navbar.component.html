@@ -23,7 +23,7 @@
     </div>
 
     <div class='flex items-center gap-4'>
-        <button (click)="openAddTaskModal()" class="bg-purple rounded-[30px] flex justify-center items-center gap-2 text-white py-3 px-6 md:px-4 font-bold text-[12px]">
+        <button (click)="openAddTaskModal()" class="bg-purple hover:bg-purplehover rounded-[30px] flex justify-center items-center gap-2 text-white py-3 px-6 md:px-4 font-bold text-[12px]">
             <img src="/assets/Images/icon-add-task-mobile.svg" alt="icon plus" class="flex justify-center items-center">
             <span class="hidden md:block lg:text-md">Add new Task</span>
         </button>
@@ -33,3 +33,71 @@
         </button>
     </div>
 </div>
+
+<app-modal *ngIf="(modalService.modalType$ | async) === 'addTask'" [isModalOpen]="modalService.isModalOpen$">
+    
+    <div class='p-6 max-h-[90vh] overflow-y-auto scrollbar-hidden '>
+      <h2 class="text-xl dark:text-white text-black font-bold mb-4">Add New Task</h2>
+      <form class='space-y-4'>
+        
+        <div class='space-y-2'>
+        <label for="title" class="text-mediumgrey dark:text-white font-semibold ">Title</label>
+        <div class="relative">
+            <input type="text" id="title" class="w-full dark:bg-darkgrey outline-none text-black focus:border-purple px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white" placeholder='e.g. Take coffee break'/>  
+            <!-- <p class="absolute right-4 top-4 text-red text-xs " >Can't be empty</p> -->
+        </div>
+        </div>
+
+        <div class='space-y-2'>
+        <label for="description" class="text-mediumgrey dark:text-white font-semibold ">Description</label>
+        <div> 
+            <textarea id="description" placeholder='e.g. It is always good to take a break. This 15 minute break will  recharge the batteries a little'
+             class="w-full dark:bg-darkgrey h-[120px] text-black outline-none focus:border-purple px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white"></textarea>
+        </div>
+        </div>
+
+        <div class='space-y-3'>
+        <label for="subtasks" class="text-mediumgrey dark:text-white font-semibold ">Subtasks</label>
+
+        <div class='flex items-center gap-4 w-full'>
+          <div class="relative w-[96%]">
+            <input type="text" id="subtasks" class="w-full dark:bg-darkgrey text-black outline-none  focus:border-purple px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white"/>  
+            <!-- <p class="absolute right-4 top-4 text-red text-xs " >Can't be empty</p> -->
+          </div>
+          <div class='w-[4%] flex justify-end'>
+            <img src="/assets/Images/icon-cross.svg" alt="icon cross">
+          </div>
+        </div>
+
+        <div class='flex items-center gap-4 w-full'>
+            <div class="relative w-[96%]">
+              <input type="text" id="subtasks2" class="w-full dark:bg-darkgrey text-black outline-none focus:border-purple px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white"/>  
+              <!-- <p class="absolute right-4 top-4 text-red text-xs " >Can't be empty</p> -->
+            </div>
+            <div class='w-[4%] flex justify-end'>
+              <img src="/assets/Images/icon-cross.svg" alt="icon cross">
+            </div>
+        </div>
+
+        <button class="w-full bg-[#F4F7FD] hover:bg-[#f5f2f7] rounded-[30px] flex justify-center items-center text-purple py-3 px-6 font-bold text-[12px]">
+            <span class="lg:text-md">+ Add New Subtask</span>
+        </button>
+        </div>
+
+        <div class='space-y-3'>
+        <label for="status" class="text-mediumgrey dark:text-white font-semibold ">Status</label>
+        <select id='status' class="w-full dark:bg-darkgrey text-black outline-none px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white focus:border-purple">
+            <option value="todo">Todo</option>
+            <option value="doing">Doing</option>
+            <option value="done">Done</option>
+        </select>
+        </div>
+
+        <button class="w-full bg-purple hover:bg-purplehover rounded-[30px] flex justify-center items-center text-white py-3 px-6 font-bold text-[12px]">
+        <span class="lg:text-md">Create Task</span>
+        </button>
+
+      </form>
+    </div>
+    
+  </app-modal>

@@ -20,7 +20,7 @@ export class NavbarComponent implements OnInit, OnDestroy{
   activeBoard$: Observable<Board| undefined> = this.store.select(selectActiveBoard);
 
 
-  constructor(private themeService: ThemeService, private modalService: ModalService, private store: Store) {}
+  constructor(private themeService: ThemeService, public modalService: ModalService, private store: Store) {}
 
   ngOnInit(): void {
     this.themeSubscription = this.themeService.getDarkModeStatus().subscribe(() => {
@@ -45,10 +45,6 @@ export class NavbarComponent implements OnInit, OnDestroy{
   }
 
   openAddTaskModal(): void {
-    const taskData = {
-      type: 'addTask',
-      // boardId: 1,
-    };
-    this.modalService.openModal(taskData);
+    this.modalService.openModal('addTask');
   }
 }

@@ -14,3 +14,16 @@ export const loadBoardsFailure = createAction(
 export const selectBoard = createAction(
     '[Board] Select Board', props<{ boardName: string }>()
   );
+  
+
+  export const addBoard = createAction(
+    '[Board] Add Board', props<{ board: Board }>()
+  );
+  
+  export const addBoardSuccess = createAction(
+    '[Board] Add Board Success', props<{ board: Board }>()
+  );
+  
+  export const addBoardFailure = createAction(
+    '[Board] Add Board Failure', props<{ error: string }>()
+  );
