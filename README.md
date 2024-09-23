@@ -11,21 +11,21 @@ In this project users are be able to:
 - Toggle the theme between light/dark modes
 
 ## Table of Contents
-- [Demo]()
+- [Demo](https://kaban-project.netlify.app/)
 - [Features](#features)
 - [Screenshoot](#screenshot)
 - [Installation](#installation)
 - [Usage](#usage)
 
 ## Demo
-You can see a live demo of the form [here]().
+You can see a live demo of the form [here](https://kaban-project.netlify.app/).
 
 ## Features
 - create task,....
 
 ## Screenshot
 
-<!-- ![Screenshot 2024-07-01 082156](https://github.com/happyGikundiro/Password-Generator-App/assets/172483008/19f93181-d18e-4dc4-b141-557afa63f4c8) -->
+![Screenshot 2024-09-23 093828](https://github.com/user-attachments/assets/c781955e-4b3b-4ad5-a9b0-64799968af75)
 
 ## Installation
 To get a local copy up and running, follow these simple steps.
