@@ -107,6 +107,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
       this.store.dispatch(addBoard({ board: newBoard }));
       this.boardForm.reset();
+      this.modalService.closeModal();
     }
   }
 

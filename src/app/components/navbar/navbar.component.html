@@ -28,9 +28,18 @@
             <span class="hidden md:block lg:text-md">Add new Task</span>
         </button>
 
-        <button>
+        <button (click)="openBoardmenuModal()">
             <img src="/assets/Images/icon-vertical-ellipsis.svg" alt="menu" class="flex justify-center items-center">
         </button>
+
+        <div  *ngIf="isBoardMenuOpen" class='absolute top-20 right-2 bg-white dark:bg-verydarkgrey p-4 rounded-md w-40 space-y-4'>
+            <div (click)="onEditBoardClick()">
+                <p class='text-mediumgrey font-semibold cursor-pointer'>Edit board</p>
+            </div>
+            <div>
+                <p class='text-red font-semibold cursor-pointer'>Delete board</p>
+            </div>
+          </div>
     </div>
 </div>
 

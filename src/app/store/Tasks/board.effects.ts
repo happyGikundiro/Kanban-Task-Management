@@ -35,4 +35,16 @@ export class BoardEffects {
       )
     )
   );
+
+  updateBoard$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(BoardActions.updateBoard),
+      mergeMap(({ board }) =>
+        of(board).pipe(
+          map(updatedBoard => BoardActions.updateBoardSuccess({ board: updatedBoard })),
+          catchError(error => of(BoardActions.updateBoardFailure({ error })))
+        )
+      )
+    )
+  );
 }

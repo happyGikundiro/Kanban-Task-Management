@@ -1,5 +1,5 @@
 import { Board,  Subtask, Task } from './../../model/model';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component,Input, OnInit, } from '@angular/core';
 import { ModalService } from '../../services/modal/modal.service';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -53,6 +53,10 @@ export class HomeComponent implements OnInit{
 
   toggleSubtaskCompletion(subtask: Subtask): void {
     subtask.isCompleted = !subtask.isCompleted;
+  }
+
+  onNewColumnClick() {
+    this.modalService.openModal('editColumns');
   }
 
 }

@@ -19,6 +19,7 @@ export class NavbarComponent implements OnInit, OnDestroy{
 
   activeBoard$: Observable<Board| undefined> = this.store.select(selectActiveBoard);
 
+  isBoardMenuOpen = false;
 
   constructor(private themeService: ThemeService, public modalService: ModalService, private store: Store) {}
 
@@ -46,5 +47,13 @@ export class NavbarComponent implements OnInit, OnDestroy{
 
   openAddTaskModal(): void {
     this.modalService.openModal('addTask');
+  }
+
+  openBoardmenuModal(): void {
+    this.isBoardMenuOpen = !this.isBoardMenuOpen;
+  }
+
+  onEditBoardClick() {
+    this.modalService.openModal('editBoard');
   }
 }
