@@ -138,8 +138,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
         if (remainingBoards.length > 0) {
           const nextBoard = remainingBoards[0];
           this.store.dispatch(BoardActions.selectBoard({ boardName: nextBoard.name }));
+          this.isBoardMenuOpen = false;
         } else {
           console.log('No boards left to select');
+          this.isBoardMenuOpen = false;
         }
       });
     } else {
@@ -150,6 +152,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   
   cancelDelete(): void {
     this.modalService.closeModal();
+    this.isBoardMenuOpen = false;
   }
 
   ngOnDestroy(): void {

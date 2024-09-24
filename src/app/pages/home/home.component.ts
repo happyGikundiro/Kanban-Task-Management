@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit{
     subtasks: [] 
   };
 
-  isBoardMenuOpen = false;
+  isTaskMenuOpen = false;
   itemType: 'board' | 'task' = 'task';
   selectedBoard: Board | null = null;
 
@@ -72,7 +72,7 @@ export class HomeComponent implements OnInit{
   }
 
   openTaskmenuModal(): void {
-    this.isBoardMenuOpen = !this.isBoardMenuOpen;
+    this.isTaskMenuOpen = !this.isTaskMenuOpen;
   }
 
   onEditTaskClick():void{
@@ -85,7 +85,7 @@ export class HomeComponent implements OnInit{
 
   cancelDeleteTask(): void{
     this.modalService.closeModal();
-    this.isBoardMenuOpen = false;
+    this.isTaskMenuOpen = false;
   }
  
   onConfirmDeleteTask(): void {
@@ -94,6 +94,7 @@ export class HomeComponent implements OnInit{
             BoardActions.deleteTaskSuccess({ boardName: this.currentBoard?.name, task: this.selectedTask })
         );
         this.modalService.closeModal();
+        this.isTaskMenuOpen = false;
     }  
   }
 

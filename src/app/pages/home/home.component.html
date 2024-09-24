@@ -47,12 +47,12 @@
           <img src="/assets/Images/icon-vertical-ellipsis.svg" alt="task-menu" class="flex justify-center items-center">
         </button>
 
-        <div  *ngIf="isBoardMenuOpen" class='absolute top-[60px] shadow-lg right-0 bg-white dark:bg-verydarkgrey p-4 rounded-md w-40 space-y-4'>
+        <div  *ngIf="isTaskMenuOpen" class='absolute top-[60px] shadow-lg right-0 bg-white dark:bg-verydarkgrey p-4 rounded-md w-40 space-y-4'>
           <div (click)="onEditTaskClick()">
-              <p class='text-mediumgrey font-semibold cursor-pointer'>Edit board</p>
+              <p class='text-mediumgrey font-semibold cursor-pointer'>Edit task</p>
           </div>
           <div (click)="onDeleteTaskClick()">
-              <p class='text-red font-semibold cursor-pointer'>Delete board</p>
+              <p class='text-red font-semibold cursor-pointer'>Delete task</p>
           </div>
         </div>
       </div>
