@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import * as BoardActions from './board.actions';
-import { Board } from '../../model/model';
+import { Board, Task } from '../../model/model';
 
 @Injectable()
 export class BoardEffects {
@@ -47,4 +47,16 @@ export class BoardEffects {
       )
     )
   );
+
+  addTask$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(BoardActions.addTask),
+      mergeMap(({ boardName, task }) =>
+        of(BoardActions.addTaskSuccess({ boardName, task })).pipe(
+          catchError(error => of(BoardActions.addTaskFailure({ error: error.message })))
+        )
+      )
+    )
+  );
+
 }

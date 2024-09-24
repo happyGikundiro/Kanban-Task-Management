@@ -32,81 +32,95 @@
             <img src="/assets/Images/icon-vertical-ellipsis.svg" alt="menu" class="flex justify-center items-center">
         </button>
 
-        <div  *ngIf="isBoardMenuOpen" class='absolute top-20 right-2 bg-white dark:bg-verydarkgrey p-4 rounded-md w-40 space-y-4'>
+        <div  *ngIf="isBoardMenuOpen" class='absolute shadow-lg top-20 right-2 bg-white dark:bg-verydarkgrey p-4 rounded-md w-40 space-y-4'>
             <div (click)="onEditBoardClick()">
                 <p class='text-mediumgrey font-semibold cursor-pointer'>Edit board</p>
             </div>
-            <div>
+            <div (click)="onDeleteBoardClick()">
                 <p class='text-red font-semibold cursor-pointer'>Delete board</p>
             </div>
-          </div>
+        </div>
     </div>
 </div>
 
-<app-modal *ngIf="(modalService.modalType$ | async) === 'addTask'" [isModalOpen]="modalService.isModalOpen$">
-    
-    <div class='p-6 max-h-[90vh] overflow-y-auto scrollbar-hidden '>
+  <app-modal *ngIf="(modalService.modalType$ | async) === 'addTask'" [isModalOpen]="modalService.isModalOpen$">
+    <div class="p-6 max-h-[90vh] overflow-y-auto scrollbar-hidden">
       <h2 class="text-xl dark:text-white text-black font-bold mb-4">Add New Task</h2>
-      <form class='space-y-4'>
+      <form class="space-y-4" [formGroup]="taskForm" (ngSubmit)="addTask()">
         
-        <div class='space-y-2'>
-        <label for="title" class="text-mediumgrey dark:text-white font-semibold ">Title</label>
-        <div class="relative">
-            <input type="text" id="title" class="w-full dark:bg-darkgrey outline-none text-black focus:border-purple px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white" placeholder='e.g. Take coffee break'/>  
-            <!-- <p class="absolute right-4 top-4 text-red text-xs " >Can't be empty</p> -->
-        </div>
-        </div>
-
-        <div class='space-y-2'>
-        <label for="description" class="text-mediumgrey dark:text-white font-semibold ">Description</label>
-        <div> 
-            <textarea id="description" placeholder='e.g. It is always good to take a break. This 15 minute break will  recharge the batteries a little'
-             class="w-full dark:bg-darkgrey h-[120px] text-black outline-none focus:border-purple px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white"></textarea>
-        </div>
-        </div>
-
-        <div class='space-y-3'>
-        <label for="subtasks" class="text-mediumgrey dark:text-white font-semibold ">Subtasks</label>
-
-        <div class='flex items-center gap-4 w-full'>
-          <div class="relative w-[96%]">
-            <input type="text" id="subtasks" class="w-full dark:bg-darkgrey text-black outline-none  focus:border-purple px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white"/>  
-            <!-- <p class="absolute right-4 top-4 text-red text-xs " >Can't be empty</p> -->
-          </div>
-          <div class='w-[4%] flex justify-end'>
-            <img src="/assets/Images/icon-cross.svg" alt="icon cross">
+        <div class="space-y-2">
+          <label for="title" class="text-mediumgrey dark:text-white font-semibold">Title</label>
+          <div class="relative">
+            <input type="text" formControlName="title" id="title" 
+                   class="w-full dark:bg-darkgrey outline-none text-black focus:border-purple px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white" 
+                   placeholder="e.g. Take coffee break" aria-label="Task Title"/>
+            <p *ngIf="taskForm.controls['title'].invalid && taskForm.controls['title'].touched" class="absolute right-4 top-4 text-red text-xs">Can't be empty</p>
           </div>
         </div>
 
-        <div class='flex items-center gap-4 w-full'>
+        <div class="space-y-2">
+          <label for="description" class="text-mediumgrey dark:text-white font-semibold">Description</label>
+          <div>
+            <textarea id="description" formControlName="description" 
+                      placeholder="e.g. It is always good to take a break..." 
+                      class="w-full dark:bg-darkgrey h-[120px] text-black outline-none focus:border-purple px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white" 
+                      aria-label="Task Description"></textarea>
+          </div>
+        </div>
+  
+        <div class="space-y-3" formArrayName="subtasks">
+          <label for="subtasks" class="text-mediumgrey dark:text-white font-semibold">Subtasks</label>
+          <div class="flex items-center gap-4 w-full" *ngFor="let subtask of Subtasks.controls; let i = index">
             <div class="relative w-[96%]">
-              <input type="text" id="subtasks2" class="w-full dark:bg-darkgrey text-black outline-none focus:border-purple px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white"/>  
-              <!-- <p class="absolute right-4 top-4 text-red text-xs " >Can't be empty</p> -->
+              <input type="text" [formControlName]="i" id="subtasks" 
+                     class="w-full dark:bg-darkgrey text-black outline-none focus:border-purple px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white" 
+                     aria-label="Subtask"/>
+              <p *ngIf="subtask.invalid && subtask.touched" class="absolute right-4 top-4 text-red text-xs">Can't be empty</p>
             </div>
-            <div class='w-[4%] flex justify-end'>
-              <img src="/assets/Images/icon-cross.svg" alt="icon cross">
+            <div class="w-[4%] flex justify-end">
+              <img src="/assets/Images/icon-cross.svg" alt="Remove subtask" (click)="removeSubtask(i)">
             </div>
-        </div>
-
-        <button class="w-full bg-[#F4F7FD] hover:bg-[#f5f2f7] rounded-[30px] flex justify-center items-center text-purple py-3 px-6 font-bold text-[12px]">
+          </div>
+          <button type="button" (click)="addSubtasks()" 
+                  class="w-full bg-[#F4F7FD] hover:bg-[#f5f2f7] rounded-[30px] flex justify-center items-center text-purple py-3 px-6 font-bold text-[12px]">
             <span class="lg:text-md">+ Add New Subtask</span>
-        </button>
+          </button>
         </div>
 
-        <div class='space-y-3'>
-        <label for="status" class="text-mediumgrey dark:text-white font-semibold ">Status</label>
-        <select id='status' class="w-full dark:bg-darkgrey text-black outline-none px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white focus:border-purple">
-            <option value="todo">Todo</option>
-            <option value="doing">Doing</option>
-            <option value="done">Done</option>
-        </select>
+        <div class="space-y-3">
+          <label for="status" class="text-mediumgrey dark:text-white font-semibold">Status</label>
+          <select id="status" formControlName="status" 
+                  class="w-full dark:bg-darkgrey text-black outline-none px-4 py-2 rounded-md border border-grey dark:border-dark dark:text-white focus:border-purple">
+            <option *ngFor="let column of (activeBoard$ | async)?.columns" [value]="column.name">{{ column.name }}</option>
+          </select>
         </div>
 
-        <button class="w-full bg-purple hover:bg-purplehover rounded-[30px] flex justify-center items-center text-white py-3 px-6 font-bold text-[12px]">
-        <span class="lg:text-md">Create Task</span>
+        <button type='submit' class="w-full bg-purple hover:bg-purplehover rounded-[30px] flex justify-center items-center text-white py-3 px-6 font-bold text-[12px]">
+          <span class="lg:text-md">Create Task</span>
         </button>
-
+  
       </form>
     </div>
-    
   </app-modal>
+  
+<app-modal *ngIf="(modalService.modalType$ | async) === 'deleteBoard'" [isModalOpen]="modalService.isModalOpen$">
+    <div class='p-6'>
+        <h2 class="text-xl text-red font-bold mb-4">
+            Delete this board?
+        </h2>
+        <div class='space-y-6'>
+            <p class='text-mediumgrey text-sm'>
+                Are you sure you want to delete the '{{ (activeBoard$ | async)?.name }}'? This action will remove all columns and tasks and cannot be reversed.
+            </p>
+            <div class='flex gap-2'>
+                <button (click)="onConfirmDeleteBoard()" class='bg-red hover:bg-redhover text-white w-full py-3 rounded-[30px] font-semibold'>
+                    Delete
+                </button>
+                <button (click)="cancelDelete()" class='bg-[#F4F7FD] hover:bg-[#f5f2f7] text-purple w-full py-3 rounded-[30px] font-semibold'>
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</app-modal>
+

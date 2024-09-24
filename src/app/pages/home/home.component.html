@@ -34,21 +34,27 @@
   
   <ng-template #noBoards>
     <div [class.md:ml-[250px]]="isLargeSidebarVisible" class="pt-[100px] min-h-screen flex flex-col justify-center items-center space-y-4">
-      <p class='text-mediumgrey font-bold text-center px-10'>This board is empty. Create a new column to get started.</p>
-      <button class="bg-purple hover:bg-purplehover rounded-[30px] flex justify-center items-center gap-2 text-white py-3 px-6 md:px-4 font-bold text-[12px]">
-        <span class="lg:text-md">+ Add new Column</span>
-      </button>
+      <p class='text-mediumgrey font-bold text-center px-10'>No board available. Create a new board to get started.</p>
     </div>
   </ng-template>
   
 
   <app-modal *ngIf="selectedTask && (modalService.modalType$ | async) === 'taskDetails'" [isModalOpen]="modalService.isModalOpen$">
-    <div class='max-h-[90vh] overflow-y-auto scrollbar-hidden p-6 space-y-6'>
+    <div class='max-h-[90vh] overflow-y-auto scrollbar-hidden p-6 space-y-6 relative'>
       <div class='flex justify-between items-center gap-6'>
         <p class='text:black dark:text-white font-bold'>{{ selectedTask.title }}</p>
-        <button>
-          <img src="/assets/Images/icon-vertical-ellipsis.svg" alt="menu" class="flex justify-center items-center">
+        <button (click)="openTaskmenuModal()">
+          <img src="/assets/Images/icon-vertical-ellipsis.svg" alt="task-menu" class="flex justify-center items-center">
         </button>
+
+        <div  *ngIf="isBoardMenuOpen" class='absolute top-[60px] shadow-lg right-0 bg-white dark:bg-verydarkgrey p-4 rounded-md w-40 space-y-4'>
+          <div (click)="onEditTaskClick()">
+              <p class='text-mediumgrey font-semibold cursor-pointer'>Edit board</p>
+          </div>
+          <div (click)="onDeleteTaskClick()">
+              <p class='text-red font-semibold cursor-pointer'>Delete board</p>
+          </div>
+        </div>
       </div>
   
       <p class='text-mediumgrey text-sm'>{{ selectedTask.description }}</p>
@@ -86,3 +92,24 @@
       </div> 
     </div>
   </app-modal>
+
+  <app-modal *ngIf="(modalService.modalType$ | async) === 'deleteTask'" [isModalOpen]="modalService.isModalOpen$">
+    <div class='p-6'>
+        <h2 class="text-xl text-red font-bold mb-4">
+            Delete this task?
+        </h2>
+        <div class='space-y-6'>
+            <p class='text-mediumgrey text-sm'>
+                Are you sure you want to delete the '{{ selectedTask?.title }}'? This action cannot be reversed.
+            </p>
+            <div class='flex gap-2'>
+                <button (click)="onConfirmDeleteTask()" class='bg-red hover:bg-redhover text-white w-full py-3 rounded-[30px] font-semibold'>
+                    Delete
+                </button>
+                <button (click)="cancelDeleteTask()" class='bg-[#F4F7FD] hover:bg-[#f5f2f7] text-purple w-full py-3 rounded-[30px] font-semibold'>
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</app-modal>

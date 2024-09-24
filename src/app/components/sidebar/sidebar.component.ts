@@ -45,11 +45,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(loadBoards());
 
-    this.boards$.subscribe((boards) => {
-      if (boards.length > 0) {
-        this.store.dispatch(selectBoard({ boardName: 'Platform Launch' }));
-      }
-    });
+    this.store.dispatch(selectBoard({ boardName: 'Platform Launch' }));
   }
 
   updateLogoAndIcon(isDarkMode: boolean = this.themeService.isDarkMode()): void {
